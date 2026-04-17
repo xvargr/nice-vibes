@@ -1,4 +1,4 @@
-name: 'zmk-shield-nice!view-vibes'
+name: 'zmk-shield-nice!nix-animation'
 build:
   settings:
     board_root: .

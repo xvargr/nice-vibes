@@ -1,0 +1,11 @@
+# Copyright (c) 2022 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+# config SHIELD_NIX_CENTRAL
+#     def_bool $(shields_list_contains,nix_animation_central)
+
+config SHIELD_NIX_PERIPHERAL_LEFT
+    def_bool $(shields_list_contains,nix_animation_left)
+
+config SHIELD_NIX_PERIPHERAL_RIGHT
+    def_bool $(shields_list_contains,nix_animation_right)

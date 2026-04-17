@@ -5,32 +5,48 @@
  *
  */
 
+#include <stdint.h>
 #include <zephyr/kernel.h>
 #include <zephyr/random/random.h>
+#include <zephyr/types.h>
 
 #include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #include <zmk/battery.h>
+#include <zmk/ble.h>
 #include <zmk/display.h>
-#include <zmk/events/usb_conn_state_changed.h>
 #include <zmk/event_manager.h>
 #include <zmk/events/battery_state_changed.h>
-#include <zmk/split/bluetooth/peripheral.h>
 #include <zmk/events/split_peripheral_status_changed.h>
+#include <zmk/events/usb_conn_state_changed.h>
+#include <zmk/split/bluetooth/peripheral.h>
 #include <zmk/usb.h>
-#include <zmk/ble.h>
 
 #include "peripheral_status.h"
 
-LV_IMG_DECLARE(nix1);
-LV_IMG_DECLARE(nix2);
+#if IS_ENABLED(CONFIG_SHIELD_NIX_PERIPHERAL_LEFT)
+  LV_IMG_DECLARE(nix_left_1);
+  LV_IMG_DECLARE(nix_left_2);
 
-const lv_img_dsc_t *anim_imgs[] = {
-    &nix1,
-    &nix2,
-};
+  static const lv_img_dsc_t *anim_imgs[] = {
+      &nix_left_1,
+      &nix_left_2,
+  };
+#elif IS_ENABLED(CONFIG_SHIELD_NIX_PERIPHERAL_RIGHT)
+  LV_IMG_DECLARE(nix_right_1);
+  LV_IMG_DECLARE(nix_right_2);
 
+  static const lv_img_dsc_t *anim_imgs[] = {
+      &nix_right_1,
+      &nix_right_2,
+  };
+#else
+  static const lv_img_dsc_t *anim_imgs[] = {};
+#endif
+
+static const uint8_t anim_frames = sizeof(anim_imgs) / sizeof(anim_imgs[0]);
+static const int anim_duration = CONFIG_CUSTOM_ANIMATION_SPEED_PER_FRAME * anim_frames;
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
@@ -122,8 +138,8 @@ int zmk_widget_status_init(struct zmk_widget_status *widget, lv_obj_t *parent) {
 
     lv_obj_t * art = lv_animimg_create(widget->obj);
     lv_obj_center(art);
-    lv_animimg_set_src(art, (const void **) anim_imgs, 2);
-    lv_animimg_set_duration(art, CONFIG_CUSTOM_ANIMATION_SPEED);
+    lv_animimg_set_src(art, (const void **) anim_imgs, anim_frames);
+    lv_animimg_set_duration(art, anim_duration);
     lv_animimg_set_repeat_count(art, LV_ANIM_REPEAT_INFINITE);
     lv_animimg_start(art);
     

@@ -1,10 +1,14 @@
 # Copyright (c) 2023 The ZMK Contributors
 # SPDX-License-Identifier: MIT
 
-if SHIELD_NICE_VIEW_CUSTOM
+if SHIELD_NIX_PERIPHERAL_RIGHT || SHIELD_NIX_PERIPHERAL_LEFT
 
-config CUSTOM_ANIMATION_SPEED
-    int "Total duration in milliseconds for animation to take"
+# config CUSTOM_ANIMATION_SPEED
+#     int "Total duration in milliseconds for animation to take"
+#     default 2000
+
+config CUSTOM_ANIMATION_SPEED_PER_FRAME
+    int "Duration in milliseconds to display each frame of the animation"
     default 2000
 
 config LV_Z_VDB_SIZE
